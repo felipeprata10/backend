@@ -23,6 +23,9 @@ public class Produto {
     @Column(nullable = false)
     private int estoque;
 
+    @Column(nullable = false)
+    private boolean ativo = true;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
@@ -40,6 +43,8 @@ public class Produto {
     public void setPreco(BigDecimal preco) { this.preco = preco; }
     public int getEstoque() { return estoque; }
     public void setEstoque(int estoque) { this.estoque = estoque; }
+    public boolean isAtivo() { return ativo; }
+    public void setAtivo(boolean ativo) { this.ativo = ativo; }
     public Categoria getCategoria() { return categoria; }
     public void setCategoria(Categoria categoria) { this.categoria = categoria; }
 }
