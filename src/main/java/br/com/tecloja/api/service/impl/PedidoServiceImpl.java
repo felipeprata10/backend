@@ -9,18 +9,16 @@ import br.com.tecloja.api.mapper.PedidoMapper;
 import br.com.tecloja.api.model.*;
 import br.com.tecloja.api.repository.*;
 import br.com.tecloja.api.service.PedidoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class PedidoServiceImpl implements PedidoService {
-
-    private static final Logger log = LoggerFactory.getLogger(PedidoServiceImpl.class);
 
     private final PedidoRepository pedidoRepository;
     private final ClienteRepository clienteRepository;
@@ -52,6 +50,15 @@ public class PedidoServiceImpl implements PedidoService {
         for (ItemPedidoFormDTO itemForm : form.itens()) {
             Produto produto = produtoRepository.findById(itemForm.produtoId())
                 .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com o ID: " + itemForm.produtoId()));
+
+            // Regra de Negócio: produto inativo não pode ser vendido (Soft Delete)
+            if (!produto.isAtivo()) {
+                log.warn("Falha no checkout: tentativa de comprar produto inativo '{}' (ID: {}).", produto.getNome(), produto.getId());
+                throw new BusinessException(String.format(
+                    "O produto '%s' não está mais disponível para venda no catálogo.",
+                    produto.getNome()
+                ));
+            }
 
             // Regra Crítica de Banco de Dados/Negócio: Validação de Estoque
             if (produto.getEstoque() < itemForm.quantidade()) {

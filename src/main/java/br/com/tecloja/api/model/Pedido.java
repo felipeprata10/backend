@@ -13,7 +13,7 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "data_pedido", nullable = false)
+    @Column(name = "data_pedido", nullable = false, updatable = false)
     private LocalDateTime dataPedido = LocalDateTime.now();
 
     @Column(nullable = false)

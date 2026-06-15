@@ -49,18 +49,18 @@ public class DataSeeder implements CommandLineRunner {
             usuarioRepository.save(admin);
 
             Usuario user = new Usuario();
-            user.setUsername("maria@gmail.com");
-            user.setSenha(encoder.encode("maria123"));
+            user.setUsername("usuario@email.com");
+            user.setSenha(encoder.encode("usuario123"));
             user.setPapeis(Set.of(papelUser));
             usuarioRepository.save(user);
         }
 
         if (clienteRepository.count() == 0) {
-            Cliente maria = new Cliente();
-            maria.setNome("Maria Silva");
-            maria.setEmail("maria@gmail.com");
-            maria.setCpf("123.456.789-00");
-            clienteRepository.save(maria);
+            Cliente cliente = new Cliente();
+            cliente.setNome("Usuário Padrão");
+            cliente.setEmail("usuario@email.com");
+            cliente.setCpf("123.456.789-00");
+            clienteRepository.save(cliente);
         }
 
         // 3. Criar Categoria e Produtos de Tecnologia

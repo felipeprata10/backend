@@ -20,6 +20,7 @@ CREATE TABLE produto (
     descricao VARCHAR(500),
     preco DECIMAL(10, 2) NOT NULL,
     estoque INT NOT NULL DEFAULT 0,
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
     categoria_id BIGINT NOT NULL,
     FOREIGN KEY (categoria_id) REFERENCES categoria(id)
 );
