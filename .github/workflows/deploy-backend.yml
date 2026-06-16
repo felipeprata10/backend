@@ -1,0 +1,31 @@
+name: CI/CD Backend - TecLoja API
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Código Fonte
+      uses: actions/checkout@v3
+
+    - name: Configurar JDK 17 (Temurin)
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Executar Testes Unitários e Empacotamento
+      # Testes usam perfil 'dev' com banco H2 em memória — sem dependência de banco externo
+      run: mvn clean package
+
+    - name: Trigger Deploy na Render (Webhook)
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        curl -X POST "$"
